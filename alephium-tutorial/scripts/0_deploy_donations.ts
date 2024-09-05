@@ -1,7 +1,7 @@
 import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
 import { Donations } from '../artifacts/ts'
-import { CallContractParams } from '@alephium/web3'
+import { CallContractParams, ONE_ALPH } from '@alephium/web3'
 import { testNodeWallet } from '@alephium/web3-test'
 
 const deployFaucet: DeployFunction<Settings> = async (
@@ -22,6 +22,7 @@ const deployFaucet: DeployFunction<Settings> = async (
   const signer = await testNodeWallet()
   const addresses = await signer.getAccounts()
   const address = addresses[0]
+  const address2 = addresses[1]
 
   const params: CallContractParams<{ donor: string }> = {
     args: { donor: address.address }
@@ -30,18 +31,18 @@ const deployFaucet: DeployFunction<Settings> = async (
   // Balance before call
   const contract = result.contractInstance
   let getDonationBal = await contract.view.getDonorTotal(params)
-  console.log(getDonationBal.returns)
-
-  const params2: CallContractParams<{ recipient: string; amount: bigint }> = {
-    args: { recipient: address.address, amount: 10n }
-  }
+  console.log(`Balance Before: ${Number(getDonationBal.returns)}`)
 
   // Depositing donation
-  await contract.view.depositToUser(params2)
+  await contract.transact.depositToUser({
+    signer,
+    args: { recipient: address.address, amount: BigInt(10000) },
+    attoAlphAmount: ONE_ALPH * BigInt(2)
+  })
 
   // Balance after call
   getDonationBal = await contract.view.getDonorTotal(params)
-  console.log(getDonationBal.returns)
+  console.log(`Balance After: ${Number(getDonationBal.returns)}`)
 }
 
 export default deployFaucet
