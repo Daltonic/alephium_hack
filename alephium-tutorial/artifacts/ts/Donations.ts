@@ -137,8 +137,8 @@ class Factory extends ContractFactory<DonationsInstance, {}> {
 export const Donations = new Factory(
   Contract.fromJson(
     DonationsContractJson,
-    "=6-4+6=1+4=1+89=13-1+3=68+7a7e0214696e73657274206174206d617020706174683a2000=142",
-    "299e1da504f8cdda3849532d7b5da36c1f0e493b00df013ae35972c6946cef79",
+    "",
+    "9cef792e7743b6530c771fa84a21f6b44e6e7f32fc218b50c7b2e9dfe8db2a2e",
     []
   )
 );

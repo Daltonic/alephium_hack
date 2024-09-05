@@ -17,12 +17,22 @@ Contract Donations() {
       assert!(amount > 0, ErrorCodes.InsufficientAmount)
       let caller = callerAddress!()
   
-      donors.insert!(caller, recipient, donors[recipient] + amount)
+      // check if the recipient exists, update if exists, create if not
+      if(donors.contains!(recipient)){
+          donors[recipient] = donors[recipient]+amount
+      }else{
+          donors.insert!(caller, recipient, amount)
+      }
+      
       emit Donation(caller, recipient, amount)
     }
   
     // Function to get a donor's total donations
     pub fn getDonorTotal(donor: Address) -> U256 {
-      return donors[donor]
+      if(donors.contains!(donor)){
+          return donors[donor]
+      }else{
+          return 0
+      }
     }
   }

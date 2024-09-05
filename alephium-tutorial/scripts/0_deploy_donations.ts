@@ -25,13 +25,23 @@ const deployFaucet: DeployFunction<Settings> = async (
 
   const params: CallContractParams<{ donor: string }> = {
     args: { donor: address.address }
-  };
+  }
 
+  // Balance before call
   const contract = result.contractInstance
-  const getDonationBal = await contract.view.getDonorTotal(params);
+  let getDonationBal = await contract.view.getDonorTotal(params)
+  console.log(getDonationBal.returns)
 
+  const params2: CallContractParams<{ recipient: string; amount: bigint }> = {
+    args: { recipient: address.address, amount: 10n }
+  }
+
+  // Depositing donation
+  await contract.view.depositToUser(params2)
+
+  // Balance after call
+  getDonationBal = await contract.view.getDonorTotal(params)
   console.log(getDonationBal.returns)
 }
 
 export default deployFaucet
-
