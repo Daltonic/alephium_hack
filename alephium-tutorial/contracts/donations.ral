@@ -23,7 +23,6 @@ Contract Donations() {
       }else{
           donors.insert!(caller, recipient, amount)
       }
-      
       emit Donation(caller, recipient, amount)
     }
   

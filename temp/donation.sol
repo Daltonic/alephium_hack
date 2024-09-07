@@ -11,7 +11,6 @@ contract Donations {
     // Function to deposit ethers to a specific user address
     function depositToUser(address _recipient) public payable {
         require(msg.value > 0, "Deposit amount must be greater than zero");
-        require(msg.value >= msg.value, "Insufficient funds");
 
         donors[_recipient] += msg.value;
         emit Donation(msg.sender, _recipient, msg.value);
